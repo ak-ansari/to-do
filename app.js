@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const cors=require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 const publicDir = path.join(__dirname, "./public");
@@ -12,6 +13,7 @@ const errorHandlerMiddleware = require("./middlewares/errorHandler");
 //midlewares
 app.use(express.json());
 app.use(express.static(publicDir));
+app.use(cors({ origin: "*" }));
 
 //routes
 app.use("/api/v1/tasks", router);

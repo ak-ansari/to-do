@@ -7,10 +7,11 @@ const loading = document.querySelector("#loading");
 const failed = document.querySelector("#failed");
 const success = document.querySelector("#success");
 const text = document.querySelector("#text");
-const id = localStorage.getItem("id");
+const id = localStorage.getItem('id');
 
 id_span.innerHTML = id;
 const url = `https://taskmanagerapp-by-ak.herokuapp.com/api/v1/tasks/${id}`;
+// const url = `http://localhost:3000/api/v1/tasks/${id}`;
 const getSingleTask = async (id) => {
   const {
     data: { task },
@@ -20,6 +21,7 @@ const getSingleTask = async (id) => {
   input.value = name;
   checkbox.checked = completed;
 };
+getSingleTask();
 
 const update = async () => {
   let editedTask = input.value;
@@ -55,9 +57,9 @@ const update = async () => {
 update_btn.addEventListener("click", update);
 const home = () => {
   window.location.href = "https://taskmanagerapp-by-ak.herokuapp.com/";
+  // window.location.href = "http://localhost:3000/";
 };
 home_btn.addEventListener("click", home);
-getSingleTask();
 function setTimeOutFun(domName) {
   setTimeout(() => {
     domName.innerHTML = "";

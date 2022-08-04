@@ -5,7 +5,7 @@ const success = document.querySelector("#success");
 const failed = document.querySelector("#failed");
 const submit_btn = document.querySelector(".submit_btn");
 const display_tasks = document.querySelector("#display_tasks");
-const url = "http://localhost:3000/api/v1/tasks";
+const url = "https://taskmanagerapp-by-ak.herokuapp.com/api/v1/tasks";
 async function getAllTasks() {
   const {
     data: { tasks },
@@ -68,7 +68,7 @@ const editTask = async (id) => {
   window.location.href = `/edit.html?id=${id}`;
 };
 const deleteTask = async (id) => {
-  let uri = `http://localhost:3000/api/v1/tasks/${id}`;
+  let uri = `https://taskmanagerapp-by-ak.herokuapp.com/api/v1/tasks/${id}`;
   success.innerHTML='Loading....'
   try {
     const data=await axios.delete(uri)

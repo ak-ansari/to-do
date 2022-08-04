@@ -10,7 +10,7 @@ const text = document.querySelector("#text");
 const id = localStorage.getItem("id");
 
 id_span.innerHTML = id;
-const url = `http://localhost:3000/api/v1/tasks/${id}`;
+const url = `https://taskmanagerapp-by-ak.herokuapp.com/api/v1/tasks/${id}`;
 const getSingleTask = async (id) => {
   const {
     data: { task },
@@ -54,7 +54,7 @@ const update = async () => {
 };
 update_btn.addEventListener("click", update);
 const home = () => {
-  window.location.href = "http://localhost:3000/";
+  window.location.href = "https://taskmanagerapp-by-ak.herokuapp.com/";
 };
 home_btn.addEventListener("click", home);
 getSingleTask();

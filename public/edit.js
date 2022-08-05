@@ -8,14 +8,16 @@ const failed = document.querySelector("#failed");
 const success = document.querySelector("#success");
 const text = document.querySelector("#text");
 const id = localStorage.getItem('id');
-
+const idString=id.toString()
+console.log(id)
+const baseUrl = "https://taskmanagerapp-by-ak.herokuapp.com";
+// const baseUrl = "http://localhost:3000";
+const apiSuffix="/api/v1/tasks/"
 id_span.innerHTML = id;
-const url = `https://taskmanagerapp-by-ak.herokuapp.com/api/v1/tasks/${id}`;
-// const url = `http://localhost:3000/api/v1/tasks/${id}`;
-const getSingleTask = async (id) => {
+const getSingleTask = async () => {
   const {
     data: { task },
-  } = await axios.get(url);
+  } = await axios.get(baseUrl+apiSuffix+idString);
   const { name, completed } = task;
   console.log(task);
   input.value = name;
@@ -55,9 +57,13 @@ const update = async () => {
  
 };
 update_btn.addEventListener("click", update);
+input.addEventListener("keyup", (e)=>{
+  if(e.key=='Enter'){
+    update()
+  }
+});
 const home = () => {
-  window.location.href = "https://taskmanagerapp-by-ak.herokuapp.com/";
-  // window.location.href = "http://localhost:3000/";
+  window.location.href = baseUrl;
 };
 home_btn.addEventListener("click", home);
 function setTimeOutFun(domName) {

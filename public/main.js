@@ -5,15 +5,23 @@ const success = document.querySelector("#success");
 const failed = document.querySelector("#failed");
 const submit_btn = document.querySelector(".submit_btn");
 const display_tasks = document.querySelector("#display_tasks");
-const url = "https://taskmanagerapp-by-ak.herokuapp.com/api/v1/tasks";
-// const url = "http://localhost:3000/api/v1/tasks";
+const noTask = document.querySelector("#noTask");
+const baseUrl = "https://taskmanagerapp-by-ak.herokuapp.com";
+// const baseUrl = "http://localhost:3000";
+const apiSuffix = "/api/v1/tasks/";
 
 getAllTasks();
 async function getAllTasks() {
   try {
     const {
       data: { tasks },
-    } = await axios.get(url);
+    } = await axios.get(baseUrl+apiSuffix);
+    let taskLength=tasks.length
+    console.log(tasks)
+    if (taskLength===0) {
+      display_tasks.innerHTML = '<h4 class="my-3" id="noTask"> No task present ......</h4>'
+      return
+    }
     for (let data of tasks) {
       let { _id: id, name, completed } = data;
       let crossed = "";
@@ -35,16 +43,14 @@ async function getAllTasks() {
       div.innerHTML = html;
       display_tasks.appendChild(div);
     }
-    
   } catch (error) {
-    failed.innerHTML=error;
-    setTimeOutFun(failed)
-    
+    failed.innerHTML = error;
+    setTimeOutFun(failed);
   }
 }
 
-
 const submit = async () => {
+  
   loading.classList.remove("d-none");
   text.innerHTML = "Creating...";
   const newTask = input.value;
@@ -52,19 +58,20 @@ const submit = async () => {
     failed.innerHTML = "please enter a task!!";
     loading.classList.add("d-none");
     text.innerHTML = "Create";
-    setTimeOutFun(failed)
+    setTimeOutFun(failed);
     return;
   }
   try {
-    const { data } = await axios.post(url, { name: newTask });
-    success.innerHTML='task added successfully : )'
+    let uri=baseUrl+apiSuffix
+    const { data } = await axios.post(uri, { name: newTask });
+    success.innerHTML = "task added successfully : )";
     display_tasks.innerHTML = "";
     await getAllTasks();
-    setTimeOutFun(success)
+    setTimeOutFun(success);
     console.log(data);
   } catch (error) {
     failed.innerHTML = error;
-   setTimeOutFun(failed);
+    setTimeOutFun(failed);
   } finally {
     input.value = "";
     loading.classList.add("d-none");
@@ -72,34 +79,35 @@ const submit = async () => {
   }
 };
 submit_btn.addEventListener("click", submit);
+input.addEventListener("keyup", (e) => {
+  if (e.key == "Enter") {
+    submit()
+  }
+});
 
 const editTask = async (id) => {
   localStorage.setItem("id", id);
-   window.location.href = `/edit.html?id=${id}`;
+  window.location.href = `/edit.html?id=${id}`;
 };
 const deleteTask = async (id) => {
-  let uri = `https://taskmanagerapp-by-ak.herokuapp.com/api/v1/tasks/${id}`;
-  // let uri = `http://localhost:3000/api/v1/tasks/${id}`;
-  success.innerHTML='Loading....'
+  let idString=id.toString();
+  success.innerHTML = "Loading....";
   try {
-    const data=await axios.delete(uri)
-    console.log(data)
+    const data = await axios.delete(baseUrl+apiSuffix+idString);
+    console.log(data);
     display_tasks.innerHTML = "";
-    success.innerHTML='Task deleted successfully'
-    setTimeOutFun(success)
+    success.innerHTML = "Task deleted successfully";
+    setTimeOutFun(success);
     await getAllTasks();
-    
   } catch (error) {
-    success.innerHTML='';
-    failed.innerHTML=error;
-    setTimeOutFun(failed)
-    
+    success.innerHTML = "";
+    failed.innerHTML = error;
+    setTimeOutFun(failed);
   }
-  
 };
 
-function setTimeOutFun(domName){
+function setTimeOutFun(domName) {
   setTimeout(() => {
-    domName.innerHTML=''
+    domName.innerHTML = "";
   }, 3000);
 }

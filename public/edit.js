@@ -36,6 +36,7 @@ const update = async () => {
   try {
      text.innerHTML = "";
      loading.classList.remove("d-none");
+     let url=baseUrl+apiSuffix+idString
 
      const { data } = await axios.patch(url, {
        name: editedTask,
